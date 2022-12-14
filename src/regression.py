@@ -76,7 +76,7 @@ TEHRUSLT_df = pd.DataFrame(
     }
 )
     
-classification_layout = html.Div([
+regression_layout = html.Div([
     dbc.Row([
         dbc.Col([
             html.H2("Regression Models")

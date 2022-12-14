@@ -4,7 +4,7 @@ import plotly.graph_objects as go
 from dash import Dash, dcc, html, Input, Output, State
 import dash_bootstrap_components as dbc
 
-predict_layout = html.Div([
+framework_layout = html.Div([
 
 ])
 

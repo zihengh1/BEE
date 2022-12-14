@@ -10,7 +10,7 @@ DATA_PATH = PATH.joinpath("data").resolve()
 df = pd.read_csv(DATA_PATH.joinpath("atussum_0321-reduced.csv"))
 
 
-customize_layout = html.Div(
+prediction_layout = html.Div(
     [
         dbc.Alert(
             "Total amount of time should not over 1440",
