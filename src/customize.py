@@ -2,69 +2,148 @@ import pathlib
 import pandas as pd
 import plotly.express as px  # (version 4.7.0 or higher)
 import plotly.graph_objects as go
-from dash import Dash, dcc, html, Input, Output, State  # pip install dash (version 2.0.0 or higher)
+from dash import Dash, dcc, html, Input, Output, State, callback  # pip install dash (version 2.0.0 or higher)
 import dash_bootstrap_components as dbc
 
 PATH = pathlib.Path(__file__).parent
 DATA_PATH = PATH.joinpath("data").resolve()
 df = pd.read_csv(DATA_PATH.joinpath("atussum_0321-reduced.csv"))
 
+
 customize_layout = html.Div(
     [
+        dbc.Alert(
+            "Total amount of time should not over 1440",
+            id="alert-fade",
+            dismissable=True,
+            is_open=False,
+            color="danger",
+        ),
         dbc.Row(
             [
                 dbc.Col(
                     [
-                        html.Label("Time 1"),
-                        html.Br(),
-                        dcc.Input(
-                            id="input-handle_1",
-                            type="text",
-                            placeholder="Insert time here",
-                            value="100",
+                        dbc.Row(
+                            [
+                                dbc.Col(
+                                    [
+                                        html.Label("Time 1"),
+                                        html.Br(),
+                                        html.Br(),
+                                        dcc.Slider(
+                                            min=0, 
+                                            max=1440, 
+                                            step=144, 
+                                            value=144,
+                                            tooltip={"always_visible":False, "placement":"bottom"},
+                                            updatemode='drag',
+                                            id='slider_1'
+                                        ),
+                                    ],
+                                ),
+                                dbc.Col(
+                                    [
+                                        html.Label("Time 2"),
+                                        html.Br(),
+                                        html.Br(),
+                                        dcc.Slider(
+                                            min=0, 
+                                            max=1440, 
+                                            step=144, 
+                                            value=144,
+                                            tooltip={"always_visible":False, "placement":"bottom"},
+                                            updatemode='drag',
+                                            id='slider_2'
+                                        ),
+                                    ],
+                                ),
+                            ],
+                            className="mt-4",
                         ),
+                        dbc.Row(
+                            [
+                                dbc.Col(
+                                    [
+                                        html.Label("Time 3"),
+                                        html.Br(),
+                                        html.Br(),
+                                        dcc.Slider(
+                                            min=0, 
+                                            max=1440, 
+                                            step=144, 
+                                            value=144,
+                                            tooltip={"always_visible":False, "placement":"bottom"},
+                                            updatemode='drag',
+                                            id='slider_3'
+                                        ),
+                                    ],
+                                ),
+                                dbc.Col(
+                                    [
+                                        html.Label("Time 4"),
+                                        html.Br(),
+                                        html.Br(),
+                                        dcc.Slider(
+                                            min=0, 
+                                            max=1440, 
+                                            step=144, 
+                                            value=144,
+                                            tooltip={"always_visible":False, "placement":"bottom"},
+                                            updatemode='drag',
+                                            id='slider_4'
+                                        ),
+                                    ],
+                                ),
+                            ],
+                            className="mt-4",
+                        ), 
+                        dbc.Row(
+                            [
+                                dbc.Col(
+                                    [
+                                        html.Label("Time 5"),
+                                        html.Br(),
+                                        html.Br(),
+                                        dcc.Slider(
+                                            min=0, 
+                                            max=1440, 
+                                            step=144, 
+                                            value=144,
+                                            tooltip={"always_visible":False, "placement":"bottom"},
+                                            updatemode='drag',
+                                            id='slider_5'
+                                        ),
+                                    ],
+                                ),
+                                dbc.Col(
+                                    [
+                                        html.Label("Time 6"),
+                                        html.Br(),
+                                        html.Br(),
+                                        dcc.Slider(
+                                            min=0, 
+                                            max=1440, 
+                                            step=144, 
+                                            value=144,
+                                            tooltip={"always_visible":False, "placement":"bottom"},
+                                            updatemode='drag',
+                                            id='slider_6'
+                                        ),
+                                    ],
+                                ),
+                            ],
+                            className="mt-4",
+                        ),  
                     ],
-                    width=3,
+                    width=8,
                 ),
                 dbc.Col(
                     [
-                        html.Label("Time 2"),
-                        html.Br(),
-                        dcc.Input(
-                            id="input-handle_2",
-                            type="text",
-                            placeholder="Insert time here",
-                            value="100",
-                        ),
-                    ],
-                    width=3,
-                ),
-                dbc.Col(
-                    [
-                        html.Label("Time 3"),
-                        html.Br(),
-                        dcc.Input(
-                            id="input-handle_3",
-                            type="text",
-                            placeholder="Insert time here",
-                            value="100",
-                        ),
-                    ],
-                    width=3,
-                ),
-                dbc.Col(
-                    [
-                        html.Label("Time 4"),
-                        html.Br(),
-                        dcc.Input(
-                            id="input-handle_4",
-                            type="text",
-                            placeholder="Insert time here",
-                            value="100",
-                        ),
-                    ],
-                    width=3,
-                ),
+                        dcc.Graph(id="input_plot", figure={})  
+                    ]
+                )
+                
+                
             ],
             className="mt-4",
         ),
@@ -76,37 +155,66 @@ customize_layout = html.Div(
                             id="hit-button",
                             children="Submit",
                             className="btn btn-outline-primary",
-                            style={"float": "right"},
-                        )
-                    ],
-                    width=11,
-                )
-            ],
-            className="mt-4",
-        ),
-        dbc.Row(
-            [
-                dbc.Col([dcc.Graph(id="myscatter", figure={})], width=6),
-                dbc.Col([dcc.Graph(id="myscatter2", figure={})], width=6),
-            ]
-        ),
-        dbc.Row(
-            [
-                dbc.Col(
-                    [
-                        html.P(
-                            id="notification",
-                            children="",
-                            style={"textAlign": "center"},
+                            # style={"float": "right"},
                         )
                     ],
                     width=12,
                 )
-            ]
+            ],
+            className="mt-4",
         ),
+        # dbc.Row(
+        #     [
+        #         dbc.Col([dcc.Graph(id="myscatter", figure={})], width=6),
+        #         dbc.Col([dcc.Graph(id="myscatter2", figure={})], width=6),
+        #     ]
+        # ),
+        # dbc.Row(
+        #     [
+        #         dbc.Col(
+        #             [
+        #                 html.P(
+        #                     id="notification",
+        #                     children="",
+        #                     style={"textAlign": "center"},
+        #                 )
+        #             ],
+        #             width=12,
+        #         )
+        #     ]
+        # ),
     ]
 )
 
+@callback(
+    Output(component_id="input_plot", component_property="figure"),
+    Input(component_id="slider_1", component_property="value"),
+    Input(component_id="slider_2", component_property="value"),
+    Input(component_id="slider_3", component_property="value"),
+    Input(component_id="slider_4", component_property="value"),
+    Input(component_id="slider_5", component_property="value"),
+    Input(component_id="slider_6", component_property="value"),
+)
+def generate_input_plot(input_1, input_2, input_3, input_4, input_5, input_6):
+    pie = px.pie(values=[input_1,input_2,input_3,input_4,input_5,input_6], names=["T1", "T2", "T3", "T4", "T5", "T6"])
+    return pie
+
+@callback(
+    Output("alert-fade", "is_open"),
+    Input(component_id="slider_1", component_property="value"),
+    Input(component_id="slider_2", component_property="value"),
+    Input(component_id="slider_3", component_property="value"),
+    Input(component_id="slider_4", component_property="value"),
+    Input(component_id="slider_5", component_property="value"),
+    Input(component_id="slider_6", component_property="value"),
+    [State("alert-fade", "is_open")],
+)
+def toggle_alert_no_fade(input_1, input_2, input_3, input_4, input_5, input_6, is_open):
+    total = input_1 + input_2 + input_3 + input_4 + input_5 + input_6
+    if total > 1440:
+        return True
+    else :
+        return False
 
 # # pull data from twitter and create the figures
 # @app.callback(
