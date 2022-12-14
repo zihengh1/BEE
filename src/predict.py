@@ -20,16 +20,7 @@ performance_df = pd.DataFrame(
 )
 
 predict_layout = html.Div([
-    dbc.Row([
-        dbc.Col([
-            html.H2("Regression Models...")
-        ], width=12)
-    ]),
-    dbc.Row([
-        dbc.Col([
-            dbc.Table.from_dataframe(performance_df, striped=True, bordered=True, hover=True, color="primary")
-        ], width=12),
-    ])
+
 ])
 
 
