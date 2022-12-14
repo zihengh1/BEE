@@ -4,10 +4,9 @@ import plotly.express as px  # (version 4.7.0 or higher)
 import plotly.graph_objects as go
 from dash import Dash, dcc, html, Input, Output  # pip install dash (version 2.0.0 or higher)
 import dash_bootstrap_components as dbc
-from predict import predict_layout
-from customize import customize_layout
-from classification import classification_layout
-# from appServer import app
+from regression import predict_layout
+from online_prediction import customize_layout
+from framework import classification_layout
 
 # PATH = pathlib.Path(__file__).parent
 # DATA_PATH = PATH.joinpath("data").resolve()
