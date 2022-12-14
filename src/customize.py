@@ -25,6 +25,12 @@ customize_layout = html.Div(
                     [
                         dbc.Row(
                             [
+                                html.P("total time:"),
+                                html.P(id="total_time"),
+                            ]
+                        ),
+                        dbc.Row(
+                            [
                                 dbc.Col(
                                     [
                                         html.Label("Time 1"),
@@ -142,8 +148,6 @@ customize_layout = html.Div(
                         dcc.Graph(id="input_plot", figure={})  
                     ]
                 )
-                
-                
             ],
             className="mt-4",
         ),
@@ -155,7 +159,6 @@ customize_layout = html.Div(
                             id="hit-button",
                             children="Submit",
                             className="btn btn-outline-primary",
-                            # style={"float": "right"},
                         )
                     ],
                     width=12,
@@ -201,6 +204,7 @@ def generate_input_plot(input_1, input_2, input_3, input_4, input_5, input_6):
 
 @callback(
     Output("alert-fade", "is_open"),
+    Output("total_time", component_property="children"),
     Input(component_id="slider_1", component_property="value"),
     Input(component_id="slider_2", component_property="value"),
     Input(component_id="slider_3", component_property="value"),
@@ -212,9 +216,9 @@ def generate_input_plot(input_1, input_2, input_3, input_4, input_5, input_6):
 def toggle_alert_no_fade(input_1, input_2, input_3, input_4, input_5, input_6, is_open):
     total = input_1 + input_2 + input_3 + input_4 + input_5 + input_6
     if total > 1440:
-        return True
+        return True, total
     else :
-        return False
+        return False, total
 
 # # pull data from twitter and create the figures
 # @app.callback(
