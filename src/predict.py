@@ -1,32 +1,33 @@
 import pandas as pd
-import plotly.express as px  # (version 4.7.0 or higher)
+import plotly.express as px
 import plotly.graph_objects as go
-from dash import Dash, dcc, html, Input, Output, State  # pip install dash (version 2.0.0 or higher)
+from dash import Dash, dcc, html, Input, Output, State
 import dash_bootstrap_components as dbc
+
 img = html.Img(src=r'assets/demo_scatter_plot.png', alt='image', style={'height':'50%', 'width':'50%'})
 
-df = pd.DataFrame(
+performance_df = pd.DataFrame(
     {
-        "Model Name": ["A Model", "B Model", "C Model"],
-        "train_r2_score": [0.5, 0.5, 0.5],
-        "test_r2_score": [0.5, 0.5, 0.5],
-        "train_RMSE": [0.5, 0.5, 0.5],
-        "test_RMSE": [0.5, 0.5, 0.5],
-        "train_MAE": [0.5, 0.5, 0.5],
-        "test_MAE": [0.5, 0.5, 0.5],
-        "scatter plot": [img, img, img],
+        "Model Name": ["Ridge", "Lasso", "Random Forest"],
+        "R-Squared Score (Train)": [0.5, 0.5, 0.5],
+        "R-Squared Score (Test)": [0.5, 0.5, 0.5],
+        "RMSE (Train)": [0.5, 0.5, 0.5],
+        "RMSE (Test)": [0.5, 0.5, 0.5],
+        "MSE (Train)": [0.5, 0.5, 0.5],
+        "MSE (Test)": [0.5, 0.5, 0.5],
+        "Scatter plot": [img, img, img],
     }
 )
 
 predict_layout = html.Div([
     dbc.Row([
         dbc.Col([
-            html.H2("Prediction Models...")
+            html.H2("Regression Models...")
         ], width=12)
     ]),
     dbc.Row([
         dbc.Col([
-            dbc.Table.from_dataframe(df, striped=True, bordered=True, hover=True, color="primary")
+            dbc.Table.from_dataframe(performance_df, striped=True, bordered=True, hover=True, color="primary")
         ], width=12),
     ])
 ])

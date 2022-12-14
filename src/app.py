@@ -22,9 +22,9 @@ app_tabs = html.Div(
     [
         dbc.Tabs(
             [
-                dbc.Tab(label="Classification", tab_id="tab-classification", labelClassName="text-success font-weight-bold", activeLabelClassName="text-danger"),
-                dbc.Tab(label="Predict", tab_id="tab-predict", labelClassName="text-success font-weight-bold", activeLabelClassName="text-danger"),
-                dbc.Tab(label="Customize", tab_id="tab-customize", labelClassName="text-success font-weight-bold", activeLabelClassName="text-danger"),
+                dbc.Tab(label="Framework", tab_id="tab-classification", labelClassName="text-success font-weight-bold", activeLabelClassName="text-danger"),
+                dbc.Tab(label="Regression", tab_id="tab-predict", labelClassName="text-success font-weight-bold", activeLabelClassName="text-danger"),
+                dbc.Tab(label="Online Prediction", tab_id="tab-customize", labelClassName="text-success font-weight-bold", activeLabelClassName="text-danger"),
             ],
             id="tabs",
             active_tab="tab-classification",
@@ -57,4 +57,4 @@ def switch_tab(tab_chosen):
 
 
 if __name__=='__main__':
-    app.run_server(debug=False)
+    app.run_server(debug=False, host = "0.0.0.0", port=15006)

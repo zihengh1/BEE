@@ -4,33 +4,82 @@ import plotly.graph_objects as go
 from dash import Dash, dcc, html, Input, Output, callback  # pip install dash (version 2.0.0 or higher)
 import dash_bootstrap_components as dbc
 
-img_sc = html.Img(src=r'assets/demo_scatter_plot.png', alt='image', style={'height':'50%', 'width':'50%'})
-img_li = html.Img(src=r'assets/demo_scatter_plot.png', alt='image', style={'height':'50%', 'width':'50%'})
-df_scatter = pd.DataFrame(
+TEAGE_images = [
+    html.Img(src=r'assets/Ridge Regression_TEAGE.png', alt='image', style={'height':'50%', 'width':'50%'}), 
+    html.Img(src=r'assets/Lasso Regression_TEAGE.png', alt='image', style={'height':'50%', 'width':'50%'}), 
+    html.Img(src=r'assets/Random Forest_TEAGE.png', alt='image', style={'height':'50%', 'width':'50%'}), 
+    html.Img(src=r'assets/XGBoost_TEAGE.png', alt='image', style={'height':'50%', 'width':'50%'}), 
+    html.Img(src=r'assets/MLP_TEAGE.png', alt='image', style={'height':'50%', 'width':'50%'})
+]
+    
+TRCHILDNUM_images = [
+    html.Img(src=r'assets/Ridge Regression_TRCHILDNUM.png', alt='image', style={'height':'50%', 'width':'50%'}), 
+    html.Img(src=r'assets/Lasso Regression_TRCHILDNUM.png', alt='image', style={'height':'50%', 'width':'50%'}), 
+    html.Img(src=r'assets/Random Forest_TRCHILDNUM.png', alt='image', style={'height':'50%', 'width':'50%'}), 
+    html.Img(src=r'assets/XGBoost_TRCHILDNUM.png', alt='image', style={'height':'50%', 'width':'50%'}), 
+    html.Img(src=r'assets/MLP_TRCHILDNUM.png', alt='image', style={'height':'50%', 'width':'50%'})
+]
+
+TRYHHCHILD_images = [
+    html.Img(src=r'assets/Ridge Regression_TRYHHCHILD.png', alt='image', style={'height':'50%', 'width':'50%'}), 
+    html.Img(src=r'assets/Lasso Regression_TRYHHCHILD.png', alt='image', style={'height':'50%', 'width':'50%'}), 
+    html.Img(src=r'assets/Random Forest_TRYHHCHILD.png', alt='image', style={'height':'50%', 'width':'50%'}), 
+    html.Img(src=r'assets/XGBoost_TRYHHCHILD.png', alt='image', style={'height':'50%', 'width':'50%'}), 
+    html.Img(src=r'assets/MLP_TRYHHCHILD.png', alt='image', style={'height':'50%', 'width':'50%'})
+]
+
+TEHRUSLT_images = [
+    html.Img(src=r'assets/Ridge Regression_TEHRUSLT.png', alt='image', style={'height':'50%', 'width':'50%'}), 
+    html.Img(src=r'assets/Lasso Regression_TEHRUSLT.png', alt='image', style={'height':'50%', 'width':'50%'}), 
+    html.Img(src=r'assets/Random Forest_TEHRUSLT.png', alt='image', style={'height':'50%', 'width':'50%'}), 
+    html.Img(src=r'assets/XGBoost_TEHRUSLT.png', alt='image', style={'height':'50%', 'width':'50%'}), 
+    html.Img(src=r'assets/MLP_TEHRUSLT.png', alt='image', style={'height':'50%', 'width':'50%'})
+]
+
+TEAGE_df = pd.DataFrame(
     {
-        "Model Name": ["A Model", "B Model", "C Model"],
-        "accurancy_score": [0.5, 0.5, 0.5],
-        "precision_score": [0.5, 0.5, 0.5],
-        "recall_score": [0.5, 0.5, 0.5],
-        "f1": [0.5, 0.5, 0.5],
-        "confusion matrix": [img_sc, img_sc, img_sc],
-    }
-)
-df_line = pd.DataFrame(
-    {
-        "Model Name": ["D Model", "E Model", "F Model"],
-        "accurancy_score": [0.1, 0.1, 0.1],
-        "precision_score": [0.1, 0.1, 0.1],
-        "recall_score": [0.1, 0.1, 0.1],
-        "f1": [0.1, 0.1, 0.1],
-        "confusion matrix": [img_li, img_li, img_li],
+        "Model Name": ["Ridge", "Lasso", "Random Forest", "XGBoost", "MLP (100)"],
+        "RMSE": [16.6409, 16.6435, 16.3329, 16.2926, 16.3596],
+        "MSE": [276.918, 277.0075, 266.7637, 265.448, 267.6379],
+        "R-Squared Score": [0.1477, 0.1474, 0.1789, 0.183, 0.1762],
+        "Scatter Plot": TEAGE_images
     }
 )
 
+TRCHILDNUM_df = pd.DataFrame(
+    {
+        "Model Name": ["Ridge", "Lasso", "Random Forest", "XGBoost", "MLP (100)"],
+        "RMSE": [1.0348, 1.0569, 1.0344, 1.0299, 1.0251],
+        "MSE": [1.0709, 1.117, 1.0701, 1.0608, 1.0509],
+        "R-Squared Score": [0.0946, 0.0556, 0.0953, 0.1031, 0.1115],
+        "Scatter Plot": TRCHILDNUM_images
+    }
+)
+
+TRYHHCHILD_df = pd.DataFrame(
+    {
+        "Model Name": ["Ridge", "Lasso", "Random Forest", "XGBoost", "MLP (100)"],
+        "RMSE": [5.2046, 5.2243, 5.1147, 5.1294, 5.0973],
+        "MSE": [27.0878, 27.2934, 26.1601, 26.3104, 25.9821],
+        "R-Squared Score": [0.0341, 0.0267, 0.0671, 0.0618, 0.0735],
+        "Scatter Plot": TRYHHCHILD_images
+    }
+)
+
+TEHRUSLT_df = pd.DataFrame(
+    {
+        "Model Name": ["Ridge", "Lasso", "Random Forest", "XGBoost", "MLP (100)"],
+        "RMSE": [15.9472, 15.9528, 15.8366, 15.836, 15.8271],
+        "MSE": [254.3126, 254.4907, 250.7995, 250.7797, 250.4986],
+        "R-Squared Score": [0.0447, 0.0441, 0.0579, 0.058, 0.059],
+        "confusion matrix": TEHRUSLT_images
+    }
+)
+    
 classification_layout = html.Div([
     dbc.Row([
         dbc.Col([
-            html.H2("Prediction Models...")
+            html.H2("Regression Models")
         ], width=12),
         
     ]),
@@ -38,9 +87,11 @@ classification_layout = html.Div([
         dbc.Col([
             dcc.Dropdown(id="attr",
                 options=[
-                    {"label": "Age", "value": "age"},
-                    {"label": "Status", "value": "status"},
-                    {"label": "Jobs", "value": "jobs"}],
+                    {"label": "TEAGE", "value": "age"},
+                    {"label": "TRCHILDNUM", "value": "childnum"},
+                    {"label": "TRYHHCHILD", "value": "age_child"}, 
+                    {"label": "TEHRUSLT", "value": "hours"},
+                ],
                 multi=False,
                 value="age",
                 clearable=False,
@@ -49,11 +100,6 @@ classification_layout = html.Div([
                 ),
         ], width = 12),
     ], className='mb-4'),
-    # dbc.Row([
-    #     dbc.Col([
-    #         dbc.Table.from_dataframe(df, id="table", striped=True, bordered=True, hover=True, color="primary")
-    #     ], width=12),
-    # ]),
     dbc.Row([
         dbc.Col(id="table", width=12),
     ]),
@@ -66,10 +112,12 @@ classification_layout = html.Div([
 )
 def update_graph(option_atr):
     if option_atr == "age":
-        print(df_scatter)
-        return dbc.Table.from_dataframe(df_scatter, striped=True, bordered=True, hover=True, color="primary")
-    if option_atr == "status":
-        print(df_line)
-        return dbc.Table.from_dataframe(df_line, striped=True, bordered=True, hover=True, color="success")
+        return dbc.Table.from_dataframe(TEAGE_df, striped=True, bordered=True, hover=True, color="primary")
+    if option_atr == "childnum":
+        return dbc.Table.from_dataframe(TRCHILDNUM_df, striped=True, bordered=True, hover=True, color="success")
+    if option_atr == "age_child":
+        return dbc.Table.from_dataframe(TRYHHCHILD_df, striped=True, bordered=True, hover=True, color="success")
+    if option_atr == "hours":
+        return dbc.Table.from_dataframe(TEHRUSLT_df, striped=True, bordered=True, hover=True, color="success")
 
 
