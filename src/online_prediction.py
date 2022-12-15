@@ -21,8 +21,11 @@ prediction_layout = html.Div(
             [
                 dbc.Row(
                     [
-                        html.P("Total time:", style={'font':'Monospace', 'font-weight': 'bold', 'font-size':'2em'}),
-                        html.P(id="total_time", style={'font':'Monospace','color':'#66B3FF', 'font-size':'1.5em', 'text-decoration':'underline'}),
+                        html.Div([
+                            html.P("Total time:", style={'font':'Monospace', 'font-weight': 'bold', 'font-size':'2em', 'display': 'inline-block'}),
+                            html.Span(id="total_time", style={'font':'Monospace','color':'#66B3FF', 'font-size':'1.5em', 'text-decoration':'underline', 'display': 'inline-block', "margin-left": "15px"}),
+                        ])
+                        
                     ]
                 ),
                 dbc.Col(
@@ -150,10 +153,77 @@ prediction_layout = html.Div(
             ],
             className="mt-4",
         ),
-        html.Img(id='age'),
-        html.Img(id='childNum'),
-        html.Img(id='childAge'),
-        html.Img(id='workHours'),
+
+        dbc.Row(
+            [
+                 html.P("Your ID card", style={'font':'Monospace', 'font-weight': 'bold', 'font-size':'2.5em', 'text-align':'center'})
+            ]
+        ),
+
+        dbc.Row(
+            [
+                dbc.Col(
+                    [
+                        html.Div(
+                            [
+                                html.Img(id='age',style={"display":"block", "margin-left":"auto", "margin-right":"auto"}),
+                                html.Br(),
+                                html.P("Brian", style={'font':'Monospace', 'font-weight': 'bold', 'font-size':'2em', 'text-align':'center'})
+                            ],
+                            style={'vertical-align':'middle'},
+                        )
+                    ],
+                    width=4, 
+                    style={'display':'flex', 'justify-content':'center', 'align-items': 'center', 'flex-flow': 'column'},
+                ),
+                dbc.Col(
+                    [
+
+                    ],
+                    width=1,
+                ),
+                dbc.Col(
+                    [
+                        dbc.Row(
+                            [
+                                html.Div([
+                                    html.P("Age:", style={'font':'Monospace', 'font-weight': 'bold', 'font-size':'2em', 'display': 'inline-block'}),
+                                    html.Span(id="ageRange", style={'font':'Monospace', 'font-size':'1.5em', 'text-decoration':'underline', 'display': 'inline-block', "margin-left": "15px"}),
+                                ])
+                            ]
+                        ),
+                        dbc.Row(
+                            [
+                                html.Div([
+                                    html.P("Children:", style={'font':'Monospace', 'font-weight': 'bold', 'font-size':'2em', 'display': 'inline-block'}),
+                                    html.Img(id="childNum", style={'max-height':'80px','object-fit': 'cover','display': 'inline-block', "margin-left": "15px"}),
+                                    html.P(id='childRange', style={'font':'Monospace', 'font-weight': 'bold', 'font-size':'0.9em', 'margin-top':'-10px'}),
+                                ])
+                            ]
+                        ),
+                        dbc.Row(
+                            [
+                                html.Div([
+                                    html.P("Children's age:", style={'font':'Monospace', 'font-weight': 'bold', 'font-size':'2em', 'display': 'inline-block'}),
+                                    html.Span(id="childAge", style={'font':'Monospace', 'font-size':'1.5em', 'text-decoration':'underline', 'display': 'inline-block', "margin-left": "15px"}),
+                                ])
+                            ]
+                        ),
+                        dbc.Row(
+                            [
+                                html.Div([
+                                    html.P("Work Hours:", style={'font':'Monospace', 'font-weight': 'bold', 'font-size':'2em', 'display': 'inline-block'}),
+                                    html.Img(id="workHours", style={'max-height':'100px','display': 'inline-block', "margin-left": "15px", 'object-fit': 'cover'}),
+                                    html.P(id='workHoursRange', style={'font':'Monospace', 'font-weight': 'bold', 'font-size':'0.9em', 'margin-top':'-10px'}),
+                                ])
+                            ]
+                        ),
+                    ],
+                    width=7,
+                ),
+            ],
+            style={"border":"5px solid", "border-radius" : "25px", "padding":'30px', "margin-left":"150px", "margin-right":"150px"}, className='mb-4'
+        ),
         dcc.Store(id='age_pred', data=[], storage_type='memory'),
         dcc.Store(id='childNum_pred', data=[], storage_type='memory'),
         dcc.Store(id='childAge_pred', data=[], storage_type='memory'),
@@ -241,60 +311,72 @@ def online_prediction(input_1, input_2, input_3, input_4, input_5, input_6):
 
 @callback(
     Output("age", component_property="src"),
+    Output("ageRange", component_property="children"),
     Input("age_pred", component_property="data"),
 )
 def generate_age_figure(age):
     print(age)
     if age > 0 and age < 10 or age == 0:
-        return "assets/age/baby.png"
+        return "assets/age/baby.png", "0 - 10"
     elif age >= 10 and age < 20:
-        return "assets/age/teenager.png"
+        return "assets/age/teenager.png", "10 - 20"
     elif age >= 20 and age < 40:
-        return "assets/age/adult.png"
+        return "assets/age/adult.png", "20 - 40"
     elif age >= 40 and age < 60:
-        return "assets/age/oldAdult.png"
+        return "assets/age/oldAdult.png", "40 - 60"
     else:
-        return "assets/age/elder.png"
+        return "assets/age/elder.png", "60+"
 
-# @callback(
-#     Output("childNum", component_property="src"),
-#     Input("childNum_pred", component_property="data"),
-# )
-# def generate_age_figure(ch):
-#     childNum = math.ceil(ch)
-#     if childNum == 0 and childNum == 1:
-#         return "assets/infant_1.png"
-#     else:
-#         return "assets/infant_2.png"
-# @callback(
-#     Output("age", component_property="src"),
-#     Input("age_pred", component_property="data"),
-# )
-# def generate_age_figure(age):
-#     print(age)
-#     if age > 0 and age < 10 or age == 0:
-#         return "assets/age/baby.png"
-#     elif age >= 10 and age < 20:
-#         return "assets/age/teenager.png"
-#     elif age >= 20 and age < 40:
-#         return "assets/age/adult.png"
-#     elif age >= 40 and age < 60:
-#         return "assets/age/oldAdult.png"
-#     else:
-#         return "assets/age/elder.png"
-# @callback(
-#     Output("age", component_property="src"),
-#     Input("age_pred", component_property="data"),
-# )
-# def generate_age_figure(age):
-#     print(age)
-#     if age > 0 and age < 10 or age == 0:
-#         return "assets/age/baby.png"
-#     elif age >= 10 and age < 20:
-#         return "assets/age/teenager.png"
-#     elif age >= 20 and age < 40:
-#         return "assets/age/adult.png"
-#     elif age >= 40 and age < 60:
-#         return "assets/age/oldAdult.png"
-#     else:
-#         return "assets/age/elder.png"
+@callback(
+    Output("childNum", component_property="src"),
+    Output("childRange", component_property="children"),
+    Input("childNum_pred", component_property="data"),
+)
+def generate_childNum_figure(ch):
+    childNum = math.ceil(ch)
+    if childNum == 0 or childNum == 1:
+        return "assets/childNum/infant_1.png", "(0 - 1)"
+    else:
+        return "assets/childNum/infant_2.png", "(2+)"
+@callback(
+    Output("childAge", component_property="children"),
+    Input("childAge_pred", component_property="data"),
+)
+def generate_childAge(ca):
+    childAge = ca
+    if childAge > 0 and childAge < 5 or childAge == 0:
+        return "0 - 5"
+    elif childAge >= 5 and childAge < 10:
+        return "5 - 10"
+    elif childAge >= 10 and childAge < 15:
+        return "10 - 15"
+    else:
+        return "15+"
+@callback(
+    Output("workHours", component_property="src"),
+    Output("workHoursRange", component_property="children"),
+    Input("workHours_pred", component_property="data"),
+)
+def generate_age_figure(wh):
+    workHours = math.ceil(wh)
+    if workHours > 0 and workHours <= 10 or workHours == 0:
+        return "assets/workHours/wrench_1.png", "(0 - 10)"
+    elif workHours > 10 and workHours <= 20:
+        return "assets/workHours/wrench_2.png", "(10 - 20)"
+    elif workHours > 20 and workHours <= 30:
+        return "assets/workHours/wrench_3.png", "(20 - 30)"
+    elif workHours > 30 and workHours <= 40:
+        return "assets/workHours/wrench_4.png", "(30 - 40)"
+    elif workHours > 40 and workHours <= 50:
+        return "assets/workHours/wrench_5.png", "(40 - 50)"
+    elif workHours > 50 and workHours <= 60:
+        return "assets/workHours/wrench_6.png", "(50 - 60)"
+    elif workHours > 60 and workHours <= 70:
+        return "assets/workHours/wrench_7.png", "(60 - 70)"
+    elif workHours > 70 and workHours <= 80:
+        return "assets/workHours/wrench_8.png", "(70 - 80)"
+    elif workHours > 80 and workHours <= 90:
+        return "assets/workHours/wrench_9.png", "(80 - 90)"
+    else:
+        return "assets/workHours/wrench_10.png", "(90 - 100)"
+    
