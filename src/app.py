@@ -23,7 +23,7 @@ app_tabs = html.Div(
             [
                 dbc.Tab(label="Framework", tab_id="tab-framework", labelClassName="text-success font-weight-bold", activeLabelClassName="text-danger"),
                 dbc.Tab(label="Regression", tab_id="tab-regression", labelClassName="text-success font-weight-bold", activeLabelClassName="text-danger"),
-                dbc.Tab(label="Online Prediction", tab_id="tab-customize", labelClassName="text-success font-weight-bold", activeLabelClassName="text-danger"),
+                dbc.Tab(label="Online Prediction", tab_id="tab-prediction", labelClassName="text-success font-weight-bold", activeLabelClassName="text-danger"),
             ],
             id="tabs",
             active_tab="tab-framework",
@@ -46,11 +46,11 @@ app.layout = dbc.Container([
 )
 def switch_tab(tab_chosen):
     if tab_chosen == "tab-regression":
-        return classification_layout
+        return regression_layout
     elif tab_chosen == "tab-framework":
-        return predict_layout
-    elif tab_chosen == "tab-customize":
-        return customize_layout
+        return framework_layout
+    elif tab_chosen == "tab-prediction":
+        return prediction_layout
     return html.P("This shouldn't be displayed for now...")
 
 
