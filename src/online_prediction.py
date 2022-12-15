@@ -22,8 +22,10 @@ prediction_layout = html.Div(
                 dbc.Row(
                     [
                         html.Div([
-                            html.P("Total time:", style={'font':'Monospace', 'font-weight': 'bold', 'font-size':'2em', 'display': 'inline-block'}),
+                            
+                            html.P("Total time for daily:", style={'font':'Monospace', 'font-weight': 'bold', 'font-size':'2em', 'display': 'inline-block'}),
                             html.Span(id="total_time", style={'font':'Monospace','color':'#66B3FF', 'font-size':'1.5em', 'text-decoration':'underline', 'display': 'inline-block', "margin-left": "15px"}),
+                            html.P("Please input your time usage distribution.",style={'font':'Monospace', 'font-weight': 'bold', 'font-size':'1.5em',}),
                         ])
                         
                     ]
@@ -35,7 +37,7 @@ prediction_layout = html.Div(
                             [
                                 dbc.Col(
                                     [
-                                        html.Label("01 Personal Care Activities"),
+                                        html.Label("01 Personal Care Activities (min)"),
                                         html.Br(),
                                         html.Br(),
                                         dcc.Slider(
@@ -51,7 +53,7 @@ prediction_layout = html.Div(
                                 ),
                                 dbc.Col(
                                     [
-                                        html.Label("12 Socializing, Relaxing, and Leisure"),
+                                        html.Label("12 Socializing, Relaxing, and Leisure (min)"),
                                         html.Br(),
                                         html.Br(),
                                         dcc.Slider(
@@ -72,7 +74,7 @@ prediction_layout = html.Div(
                             [
                                 dbc.Col(
                                     [
-                                        html.Label("05 Work & Work-Related Activities"),
+                                        html.Label("05 Work & Work-Related Activities (min)"),
                                         html.Br(),
                                         html.Br(),
                                         dcc.Slider(
@@ -88,7 +90,7 @@ prediction_layout = html.Div(
                                 ),
                                 dbc.Col(
                                     [
-                                        html.Label("02 Household Activities"),
+                                        html.Label("02 Household Activities (min)"),
                                         html.Br(),
                                         html.Br(),
                                         dcc.Slider(
@@ -109,7 +111,7 @@ prediction_layout = html.Div(
                             [
                                 dbc.Col(
                                     [
-                                        html.Label("18 Traveling"),
+                                        html.Label("18 Traveling (min)"),
                                         html.Br(),
                                         html.Br(),
                                         dcc.Slider(
@@ -125,7 +127,7 @@ prediction_layout = html.Div(
                                 ),
                                 dbc.Col(
                                     [
-                                        html.Label("11 Eating and Drinking"),
+                                        html.Label("11 Eating and Drinking (min)"),
                                         html.Br(),
                                         html.Br(),
                                         dcc.Slider(
@@ -195,7 +197,7 @@ prediction_layout = html.Div(
                         dbc.Row(
                             [
                                 html.Div([
-                                    html.P("Children:", style={'font':'Monospace', 'font-weight': 'bold', 'font-size':'2em', 'display': 'inline-block'}),
+                                    html.P("Number of Children:", style={'font':'Monospace', 'font-weight': 'bold', 'font-size':'2em', 'display': 'inline-block'}),
                                     html.Img(id="childNum", style={'max-height':'80px','object-fit': 'cover','display': 'inline-block', "margin-left": "15px"}),
                                     html.P(id='childRange', style={'font':'Monospace', 'font-weight': 'bold', 'font-size':'0.9em', 'margin-top':'-10px'}),
                                 ])
@@ -204,7 +206,7 @@ prediction_layout = html.Div(
                         dbc.Row(
                             [
                                 html.Div([
-                                    html.P("Children's age:", style={'font':'Monospace', 'font-weight': 'bold', 'font-size':'2em', 'display': 'inline-block'}),
+                                    html.P("Age of Children:", style={'font':'Monospace', 'font-weight': 'bold', 'font-size':'2em', 'display': 'inline-block'}),
                                     html.Span(id="childAge", style={'font':'Monospace', 'font-size':'1.5em', 'text-decoration':'underline', 'display': 'inline-block', "margin-left": "15px"}),
                                 ])
                             ]
@@ -212,7 +214,7 @@ prediction_layout = html.Div(
                         dbc.Row(
                             [
                                 html.Div([
-                                    html.P("Work Hours:", style={'font':'Monospace', 'font-weight': 'bold', 'font-size':'2em', 'display': 'inline-block'}),
+                                    html.P("Weekly Work Hours:", style={'font':'Monospace', 'font-weight': 'bold', 'font-size':'2em', 'display': 'inline-block'}),
                                     html.Img(id="workHours", style={'max-height':'100px','display': 'inline-block', "margin-left": "15px", 'object-fit': 'cover'}),
                                     html.P(id='workHoursRange', style={'font':'Monospace', 'font-weight': 'bold', 'font-size':'0.9em', 'margin-top':'-10px'}),
                                 ])
@@ -242,7 +244,7 @@ prediction_layout = html.Div(
 )
 
 def generate_input_plot(input_1, input_2, input_3, input_4, input_5, input_6):
-    pie = px.pie(values=[input_1,input_2,input_3,input_4,input_5,input_6], names=["T1", "T2", "T3", "T4", "T5", "T6"])
+    pie = px.pie(values=[input_1,input_2,input_3,input_4,input_5,input_6], names=["01", "12", "05", "02", "18", "11"])
     return pie
 
 @callback(
@@ -335,9 +337,9 @@ def generate_age_figure(age):
 def generate_childNum_figure(ch):
     childNum = math.ceil(ch)
     if childNum == 0 or childNum == 1:
-        return "assets/childNum/infant_1.png", "(0 - 1)"
+        return "assets/childNum/infant_1.png", "(About 0 - 1 child)"
     else:
-        return "assets/childNum/infant_2.png", "(2+)"
+        return "assets/childNum/infant_2.png", "(About 2+ children)"
 @callback(
     Output("childAge", component_property="children"),
     Input("childAge_pred", component_property="data"),
@@ -360,23 +362,23 @@ def generate_childAge(ca):
 def generate_age_figure(wh):
     workHours = math.ceil(wh)
     if workHours > 0 and workHours <= 10 or workHours == 0:
-        return "assets/workHours/wrench_1.png", "(0 - 10)"
+        return "assets/workHours/wrench_1.png", "(About 0 - 10 hrs)"
     elif workHours > 10 and workHours <= 20:
-        return "assets/workHours/wrench_2.png", "(10 - 20)"
+        return "assets/workHours/wrench_2.png", "(About 10 - 20 hrs)"
     elif workHours > 20 and workHours <= 30:
-        return "assets/workHours/wrench_3.png", "(20 - 30)"
+        return "assets/workHours/wrench_3.png", "(About 20 - 30 hrs)"
     elif workHours > 30 and workHours <= 40:
-        return "assets/workHours/wrench_4.png", "(30 - 40)"
+        return "assets/workHours/wrench_4.png", "(About 30 - 40 hrs)"
     elif workHours > 40 and workHours <= 50:
-        return "assets/workHours/wrench_5.png", "(40 - 50)"
+        return "assets/workHours/wrench_5.png", "(About 40 - 50 hrs)"
     elif workHours > 50 and workHours <= 60:
-        return "assets/workHours/wrench_6.png", "(50 - 60)"
+        return "assets/workHours/wrench_6.png", "(About 50 - 60 hrs)"
     elif workHours > 60 and workHours <= 70:
-        return "assets/workHours/wrench_7.png", "(60 - 70)"
+        return "assets/workHours/wrench_7.png", "(About 60 - 70 hrs)"
     elif workHours > 70 and workHours <= 80:
-        return "assets/workHours/wrench_8.png", "(70 - 80)"
+        return "assets/workHours/wrench_8.png", "(About 70 - 80 hrs)"
     elif workHours > 80 and workHours <= 90:
-        return "assets/workHours/wrench_9.png", "(80 - 90)"
+        return "assets/workHours/wrench_9.png", "(About 80 - 90 hrs)"
     else:
-        return "assets/workHours/wrench_10.png", "(90 - 100)"
+        return "assets/workHours/wrench_10.png", "(About 90+ hrs)"
     
