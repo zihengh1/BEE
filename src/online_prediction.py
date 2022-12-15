@@ -1,14 +1,11 @@
+import pickle
 import pathlib
+import numpy as np
 import pandas as pd
 import plotly.express as px  # (version 4.7.0 or higher)
 import plotly.graph_objects as go
 from dash import Dash, dcc, html, Input, Output, State, callback  # pip install dash (version 2.0.0 or higher)
 import dash_bootstrap_components as dbc
-
-PATH = pathlib.Path(__file__).parent
-DATA_PATH = PATH.joinpath("data").resolve()
-df = pd.read_csv(DATA_PATH.joinpath("atussum_0321-reduced.csv"))
-
 
 prediction_layout = html.Div(
     [
@@ -25,6 +22,10 @@ prediction_layout = html.Div(
                     [
                         html.P("Total time:", style={'font':'Monospace', 'font-weight': 'bold', 'font-size':'2em'}),
                         html.P(id="total_time", style={'font':'Monospace','color':'#66B3FF', 'font-size':'1.5em', 'text-decoration':'underline'}),
+                        html.P(id="pred1", style={'font':'Monospace','color':'#66B3FF', 'font-size':'1.5em', 'text-decoration':'underline'}),
+                        html.P(id="pred2", style={'font':'Monospace','color':'#66B3FF', 'font-size':'1.5em', 'text-decoration':'underline'}),
+                        html.P(id="pred3", style={'font':'Monospace','color':'#66B3FF', 'font-size':'1.5em', 'text-decoration':'underline'}),
+                        html.P(id="pred4", style={'font':'Monospace','color':'#66B3FF', 'font-size':'1.5em', 'text-decoration':'underline'}),
                     ]
                 ),
                 dbc.Col(
@@ -34,7 +35,7 @@ prediction_layout = html.Div(
                             [
                                 dbc.Col(
                                     [
-                                        html.Label("Time 1"),
+                                        html.Label("01 Personal Care Activities"),
                                         html.Br(),
                                         html.Br(),
                                         dcc.Slider(
@@ -50,7 +51,7 @@ prediction_layout = html.Div(
                                 ),
                                 dbc.Col(
                                     [
-                                        html.Label("Time 2"),
+                                        html.Label("12 Socializing, Relaxing, and Leisure"),
                                         html.Br(),
                                         html.Br(),
                                         dcc.Slider(
@@ -71,7 +72,7 @@ prediction_layout = html.Div(
                             [
                                 dbc.Col(
                                     [
-                                        html.Label("Time 3"),
+                                        html.Label("05 Work & Work-Related Activities"),
                                         html.Br(),
                                         html.Br(),
                                         dcc.Slider(
@@ -87,7 +88,7 @@ prediction_layout = html.Div(
                                 ),
                                 dbc.Col(
                                     [
-                                        html.Label("Time 4"),
+                                        html.Label("02 Household Activities"),
                                         html.Br(),
                                         html.Br(),
                                         dcc.Slider(
@@ -108,7 +109,7 @@ prediction_layout = html.Div(
                             [
                                 dbc.Col(
                                     [
-                                        html.Label("Time 5"),
+                                        html.Label("18 Traveling"),
                                         html.Br(),
                                         html.Br(),
                                         dcc.Slider(
@@ -124,7 +125,7 @@ prediction_layout = html.Div(
                                 ),
                                 dbc.Col(
                                     [
-                                        html.Label("Time 6"),
+                                        html.Label("11 Eating and Drinking"),
                                         html.Br(),
                                         html.Br(),
                                         dcc.Slider(
@@ -179,6 +180,7 @@ prediction_layout = html.Div(
     Input(component_id="slider_5", component_property="value"),
     Input(component_id="slider_6", component_property="value"),
 )
+
 def generate_input_plot(input_1, input_2, input_3, input_4, input_5, input_6):
     pie = px.pie(values=[input_1,input_2,input_3,input_4,input_5,input_6], names=["T1", "T2", "T3", "T4", "T5", "T6"])
     return pie
@@ -201,6 +203,55 @@ def toggle_alert_no_fade(input_1, input_2, input_3, input_4, input_5, input_6, i
     else :
         return False, total
 
+@callback(
+    Output("pred1", component_property="children"),
+    Output("pred2", component_property="children"),
+    Output("pred3", component_property="children"),
+    Output("pred4", component_property="children"),
+    Input(component_id="hit-button", component_property="n_clicks"),
+    Input(component_id="slider_1", component_property="value"),
+    Input(component_id="slider_2", component_property="value"),
+    Input(component_id="slider_3", component_property="value"),
+    Input(component_id="slider_4", component_property="value"),
+    Input(component_id="slider_5", component_property="value"),
+    Input(component_id="slider_6", component_property="value"),
+)
+def online_prediction(click, input_1, input_2, input_3, input_4, input_5, input_6):
+    output_attributes = ["TEAGE", "TRCHILDNUM", "TRYHHCHILD", "TEHRUSLT"]
+    scaler_name = ["t01", "t12", "t05", "t02", "t18", "t11"]
+    
+    inputs = [input_1, input_2, input_3, input_4, input_5, input_6]
+    
+    avg_residual = 0
+    if sum(inputs) < 1440:
+        residual = 1440 - sum(inputs)
+        avg_residual = residual / 6
+        
+    transform_inputs = []
+    for i, input_value in enumerate(inputs):
+        input_value += avg_residual
+        scaler_path_name = "./saved_scaler/" + scaler_name[i] + ".pkl"
+        with open(scaler_path_name, 'rb') as f:
+            scaler = pickle.load(f)
+        transformed_input = scaler.transform(np.expand_dims(np.array([input_value]), axis=1))
+        transform_inputs.append(transformed_input[0])
+    model_inputs = np.array(transform_inputs).T
+    
+    print(model_inputs)
+    
+    predictions = []
+    for attr in output_attributes:
+        model_path_name = "./saved_model/" + attr + "_mlp.pkl"
+        with open(model_path_name, 'rb') as f:
+            best_model = pickle.load(f)
+        prediction = best_model.predict(model_inputs)
+        if prediction[0] < 0:
+            prediction[0] = 0
+        predictions.append(prediction[0])
+                
+    return predictions[0], predictions[1], predictions[2], predictions[3]
+
+    
 # # pull data from twitter and create the figures
 # @app.callback(
 #     Output(component_id="myscatter", component_property="figure"),
