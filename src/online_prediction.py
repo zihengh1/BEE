@@ -21,14 +21,15 @@ prediction_layout = html.Div(
         ),
         dbc.Row(
             [
+                dbc.Row(
+                    [
+                        html.P("Total time:", style={'font':'Monospace', 'font-weight': 'bold', 'font-size':'2em'}),
+                        html.P(id="total_time", style={'font':'Monospace','color':'#66B3FF', 'font-size':'1.5em', 'text-decoration':'underline'}),
+                    ]
+                ),
                 dbc.Col(
                     [
-                        dbc.Row(
-                            [
-                                html.P("total time:"),
-                                html.P(id="total_time"),
-                            ]
-                        ),
+                        
                         dbc.Row(
                             [
                                 dbc.Col(
@@ -166,26 +167,6 @@ prediction_layout = html.Div(
             ],
             className="mt-4",
         ),
-        # dbc.Row(
-        #     [
-        #         dbc.Col([dcc.Graph(id="myscatter", figure={})], width=6),
-        #         dbc.Col([dcc.Graph(id="myscatter2", figure={})], width=6),
-        #     ]
-        # ),
-        # dbc.Row(
-        #     [
-        #         dbc.Col(
-        #             [
-        #                 html.P(
-        #                     id="notification",
-        #                     children="",
-        #                     style={"textAlign": "center"},
-        #                 )
-        #             ],
-        #             width=12,
-        #         )
-        #     ]
-        # ),
     ]
 )
 

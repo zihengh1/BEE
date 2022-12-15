@@ -11,7 +11,7 @@ from framework import framework_layout
 # PATH = pathlib.Path(__file__).parent
 # DATA_PATH = PATH.joinpath("data").resolve()
 app = Dash(__name__, 
-            external_stylesheets=[dbc.themes.BOOTSTRAP],
+            external_stylesheets=[dbc.themes.CERULEAN],
             suppress_callback_exceptions=True,
             meta_tags=[{'name': 'viewport',
                             'content': 'width=device-width, initial-scale=1.0'}]

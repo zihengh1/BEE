@@ -100,11 +100,114 @@ regression_layout = html.Div([
                 ),
         ], width = 12),
     ], className='mb-4'),
+
+    dbc.Row([
+        dbc.Col([
+             dcc.Graph(id='RMSE')
+        ], width=4),
+        dbc.Col([
+             dcc.Graph(id='MSE')
+        ], width=4),
+        dbc.Col([
+             dcc.Graph(id='R2')
+        ], width=4),
+    ],style={"border":"2px solid", "border-radius" : "25px", "color" : "#66B3FF", "padding":'5px'}, className='mb-4'),
     dbc.Row([
         dbc.Col(id="table", width=12),
     ]),
     
 ])
+@callback(
+    Output(component_id='RMSE', component_property='figure'),
+    Output(component_id='MSE', component_property='figure'),
+    Output(component_id='R2', component_property='figure'),
+    [Input(component_id='attr', component_property='value')]
+)
+def update_model_graph(option_atr):
+    if option_atr == 'age':
+        age_df = TEAGE_df
+        rmse_barchart=px.bar(
+            data_frame=age_df,
+            x="Model Name",
+            y="RMSE",
+            color="Model Name",
+        )
+        mse_barchart=px.bar(
+            data_frame=age_df,
+            x="Model Name",
+            y="MSE",
+            color="Model Name",
+        )
+        r2_barchart=px.bar(
+            data_frame=age_df,
+            x="Model Name",
+            y="R-Squared Score",
+            color="Model Name",
+        )
+        return rmse_barchart, mse_barchart, r2_barchart
+    if option_atr == 'childnum':
+        children_df = TRCHILDNUM_df
+        rmse_barchart=px.bar(
+            data_frame=children_df,
+            x="Model Name",
+            y="RMSE",
+            color="Model Name",
+        )
+        mse_barchart=px.bar(
+            data_frame=children_df,
+            x="Model Name",
+            y="MSE",
+            color="Model Name",
+        )
+        r2_barchart=px.bar(
+            data_frame=children_df,
+            x="Model Name",
+            y="R-Squared Score",
+            color="Model Name",
+        )
+        return rmse_barchart, mse_barchart, r2_barchart
+    if option_atr == 'age_child':
+        age_child_df = TRYHHCHILD_df
+        rmse_barchart=px.bar(
+            data_frame=age_child_df,
+            x="Model Name",
+            y="RMSE",
+            color="Model Name",
+        )
+        mse_barchart=px.bar(
+            data_frame=age_child_df,
+            x="Model Name",
+            y="MSE",
+            color="Model Name",
+        )
+        r2_barchart=px.bar(
+            data_frame=age_child_df,
+            x="Model Name",
+            y="R-Squared Score",
+            color="Model Name",
+        )
+        return rmse_barchart, mse_barchart, r2_barchart
+    if option_atr == 'hours':
+        hours_df = TEHRUSLT_df
+        rmse_barchart=px.bar(
+            data_frame=hours_df,
+            x="Model Name",
+            y="RMSE",
+            color="Model Name",
+        )
+        mse_barchart=px.bar(
+            data_frame=hours_df,
+            x="Model Name",
+            y="MSE",
+            color="Model Name",
+        )
+        r2_barchart=px.bar(
+            data_frame=hours_df,
+            x="Model Name",
+            y="R-Squared Score",
+            color="Model Name",
+        )
+        return rmse_barchart, mse_barchart, r2_barchart
 
 @callback(
     Output(component_id='table', component_property='children'),
@@ -112,12 +215,13 @@ regression_layout = html.Div([
 )
 def update_graph(option_atr):
     if option_atr == "age":
-        return dbc.Table.from_dataframe(TEAGE_df, striped=True, bordered=True, hover=True, color="primary")
+        return dbc.Table.from_dataframe(TEAGE_df, striped=True, bordered=True, hover=True, color="primary", style={'text-align': 'center', 'vertical-align':'middle'},)
     if option_atr == "childnum":
-        return dbc.Table.from_dataframe(TRCHILDNUM_df, striped=True, bordered=True, hover=True, color="success")
+        return dbc.Table.from_dataframe(TRCHILDNUM_df, striped=True, bordered=True, hover=True, color="primary", style={'text-align': 'center', 'vertical-align':'middle'},)
     if option_atr == "age_child":
-        return dbc.Table.from_dataframe(TRYHHCHILD_df, striped=True, bordered=True, hover=True, color="success")
+        return dbc.Table.from_dataframe(TRYHHCHILD_df, striped=True, bordered=True, hover=True, color="primary", style={'text-align': 'center', 'vertical-align':'middle'},)
     if option_atr == "hours":
-        return dbc.Table.from_dataframe(TEHRUSLT_df, striped=True, bordered=True, hover=True, color="success")
+        return dbc.Table.from_dataframe(TEHRUSLT_df, striped=True, bordered=True, hover=True, color="primary", style={'text-align': 'center', 'vertical-align':'middle'},)
+
 
 
