@@ -316,18 +316,18 @@ def online_prediction(input_1, input_2, input_3, input_4, input_5, input_6):
     Output("ageRange", component_property="children"),
     Input("age_pred", component_property="data"),
 )
-def generate_age_figure(age):
-    print(age)
+def generate_age_figure(a):
+    age = math.ceil(a)
     if age > 0 and age < 10 or age == 0:
-        return "assets/age/baby.png", "0 - 10"
+        return "assets/age/baby.png", age
     elif age >= 10 and age < 20:
-        return "assets/age/teenager.png", "10 - 20"
+        return "assets/age/teenager.png", age
     elif age >= 20 and age < 40:
-        return "assets/age/adult.png", "20 - 40"
+        return "assets/age/adult.png", age
     elif age >= 40 and age < 60:
-        return "assets/age/oldAdult.png", "40 - 60"
+        return "assets/age/oldAdult.png", age
     else:
-        return "assets/age/elder.png", "60+"
+        return "assets/age/elder.png", age
 
 @callback(
     Output("childNum", component_property="src"),
@@ -345,15 +345,8 @@ def generate_childNum_figure(ch):
     Input("childAge_pred", component_property="data"),
 )
 def generate_childAge(ca):
-    childAge = ca
-    if childAge > 0 and childAge < 5 or childAge == 0:
-        return "0 - 5"
-    elif childAge >= 5 and childAge < 10:
-        return "5 - 10"
-    elif childAge >= 10 and childAge < 15:
-        return "10 - 15"
-    else:
-        return "15+"
+    childAge = math.ceil(ca)
+    return childAge
 @callback(
     Output("workHours", component_property="src"),
     Output("workHoursRange", component_property="children"),
