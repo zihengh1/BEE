@@ -291,7 +291,7 @@ def online_prediction(input_1, input_2, input_3, input_4, input_5, input_6):
     transform_inputs = []
     for i, input_value in enumerate(inputs):
         input_value += avg_residual
-        scaler_path_name = "./saved_scaler/" + scaler_name[i] + ".pkl"
+        scaler_path_name = "assets/saved_scaler/" + scaler_name[i] + ".pkl"
         with open(scaler_path_name, 'rb') as f:
             scaler = pickle.load(f)
         transformed_input = scaler.transform(np.expand_dims(np.array([input_value]), axis=1))
@@ -301,7 +301,7 @@ def online_prediction(input_1, input_2, input_3, input_4, input_5, input_6):
     
     predictions = []
     for attr in output_attributes:
-        model_path_name = "./saved_model/" + attr + "_mlp.pkl"
+        model_path_name = "assets/saved_model/" + attr + "_mlp.pkl"
         with open(model_path_name, 'rb') as f:
             best_model = pickle.load(f)
         prediction = best_model.predict(model_inputs)
